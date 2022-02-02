@@ -3,7 +3,6 @@
 """
 from pathlib import *
 from datetime import datetime, timezone
-from time import strftime
 
 import pandas as pd
 import finplot as fplt
@@ -18,12 +17,10 @@ symbol = 'SBER'
 20200103,100000,154670.0,156720.0,154670.0,156610.0,13396,156000.0,810
 20200103,100500,156600.0,156680.0,156500.0,156610.0,4957,156590.0,624
 """
+df = pd.read_csv(Path('c:\data_quote\data_prepare_SBER_5m\SBER_2021.csv'), delimiter=',')
 
 pd.set_option('max_rows', 5)  # Установка 5 строк вывода DF
 pd.set_option('display.max_columns', None)  # Сброс ограничений на число столбцов
-
-df = pd.read_csv(Path('c:\data_quote\data_prepare_SBER_5m\SBER_2021.csv'), delimiter=',')
-# print(df)
 
 
 def zero_hour(cell):
@@ -44,7 +41,7 @@ df['<DATE_TIME>'] = df['<DATE>'].astype(str) + ' ' + df['<TIME>'].astype(str)
 df = df.set_index(pd.DatetimeIndex(df['<DATE_TIME>']))
 # print(df)
 
-# Удаляем ненужные колонки. '1' означает, что отбрасываем колонку а не индекс
+# Удаляем ненужные колонки. axis=1 означает, что отбрасываем колонку а не индекс
 df.drop(labels=['<DATE_TIME>', '<DATE>', '<TIME>', '<VOL>'], axis=1, inplace=True)
 print(df)
 
