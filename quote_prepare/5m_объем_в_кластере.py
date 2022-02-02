@@ -7,14 +7,14 @@
 import pandas as pd
 from pathlib import *
 
-source_file_5m: Path = Path('c:\data_quote\data_finam_RTS_5m\SPFB.RTS_2020.csv')
-source_dir_tick: Path = Path('c:\data_quote\data_finam_RTS_tick')
-target_file_5m: Path = Path('c:\data_quote\data_prepare_RTS_5m\SPFB.RTS_2020.csv')
-year_tick = '2020'
+source_file_5m: Path = Path('c:\data_quote\data_finam_SBER_5m\SBER_2021.csv')
+source_dir_tick: Path = Path('c:\data_quote\data_finam_SBER_tick')
+target_file_5m: Path = Path('c:\data_quote\data_prepare_SBER_5m\SBER_2021.csv')
+year_tick = '2021'
 
 
-pd.set_option('max_rows', 5)  # Установка 5 строк вывода DF
-pd.set_option('display.max_columns', None)  # Сброс ограничений на число столбцов
+# pd.set_option('max_rows', 5)  # Установка 5 строк вывода DF
+# pd.set_option('display.max_columns', None)  # Сброс ограничений на число столбцов
 # Создание df для 5 мин баров
 df_5m: pd = pd.read_csv(source_file_5m, delimiter=',')
 df_5m['<MAX_VOLUME_PRICE>'] = None  # Создание новой колонки

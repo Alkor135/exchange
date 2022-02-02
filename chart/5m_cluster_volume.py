@@ -2,14 +2,15 @@
 Из 5m файла рисует график и отмечает кластера с максимальным объемом.
 """
 from pathlib import *
-import datetime
+from datetime import datetime, timezone
+from time import strftime
 
 import pandas as pd
 import finplot as fplt
 
-fplt.display_timezone = datetime.timezone.utc
+fplt.display_timezone = timezone.utc
 
-symbol = 'RTS'
+symbol = 'SBER'
 # Загружаем файл в DF
 # Формат файла
 """
@@ -18,18 +19,34 @@ symbol = 'RTS'
 20200103,100500,156600.0,156680.0,156500.0,156610.0,4957,156590.0,624
 """
 
-df = pd.read_csv(Path('c:\data_quote\data_prepare_RTS_5m\SPFB.RTS_2020.csv'), delimiter=',')
+pd.set_option('max_rows', 5)  # Установка 5 строк вывода DF
+pd.set_option('display.max_columns', None)  # Сброс ограничений на число столбцов
+
+df = pd.read_csv(Path('c:\data_quote\data_prepare_SBER_5m\SBER_2021.csv'), delimiter=',')
 # print(df)
 
-# Создаем новый столбец date_time слиянием столбцов <DATE> и <TIME>
+
+def zero_hour(cell):
+    """ Функция преобразует время (с финама приходят часы без нулей (с декабря 2021), которые pandas не воспринимает)"""
+    cell = f'{int(cell)}'
+    tmp_time = datetime.strptime(cell, "%H%M%S")
+    return tmp_time.strftime("%H%M%S")
+
+
+# Преобразуем столбец <TIME>, где нужно добавив 0 перед часом
+df['<TIME>'] = df.apply(lambda x: zero_hour(x['<TIME>']), axis=1)
+
+# Создаем новый столбец <DATE_TIME> слиянием столбцов <DATE> и <TIME>
 df['<DATE_TIME>'] = df['<DATE>'].astype(str) + ' ' + df['<TIME>'].astype(str)
-# Меняем индекс и делаем его типом date
+# print(df)
+
+# Меняем индекс и делаем его типом datetime
 df = df.set_index(pd.DatetimeIndex(df['<DATE_TIME>']))
 # print(df)
 
 # Удаляем ненужные колонки. '1' означает, что отбрасываем колонку а не индекс
 df.drop(labels=['<DATE_TIME>', '<DATE>', '<TIME>', '<VOL>'], axis=1, inplace=True)
-# print(df)
+print(df)
 
 # создаем 4 окна
 ax = fplt.create_plot(symbol, rows=1)
