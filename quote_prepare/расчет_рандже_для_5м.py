@@ -11,10 +11,7 @@ import talib
 
 
 def body(open, close):
-    if open > close:
-        return open - close
-    else:
-        return close - open
+        return abs(close - open)
 
 
 if __name__ == "__main__":
@@ -25,9 +22,9 @@ if __name__ == "__main__":
     df: pd = pd.read_csv(source_file, delimiter=',')  # Считываем тиковые данные в DF
     # Преобразуем столбец <TIME>, где нужно добавив 0 перед часом
     df['<BODY>'] = df.apply(lambda x: body(x['<OPEN>'], x['<CLOSE>']), axis=1)
-    real = talib.MA(df['<BODY>'], timeperiod=period, matype=0)
+    df['<RAZMER>'] = talib.MA(df['<BODY>'], timeperiod=period, matype=0)
     print(df)
-    print(real)
+    # print(real)
 
     """
     Получается, что рендж бар для фьючерса RTS должен быть размером 150, чтобы количество баров в дне, 

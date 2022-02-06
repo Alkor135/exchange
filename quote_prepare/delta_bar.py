@@ -30,12 +30,12 @@ def run(tick_files: list, delta_max_val: int, target_dir: Path):
         tiker = list_split[0]  # Получение тикера из имени файла
         date_quote_file = re.findall(r'\d+', str(tick_file))  # Получение цифр из пути к файлу
         target_name = f'{tiker}_delta_{date_quote_file[0]}.csv'  # Создание имени новому файлу
+        target_file_delta: Path = Path(target_dir / target_name)  # Составление пути к файлу
 
-        if Path.is_file(target_dir / target_name):
-            print(f'Файл уже существует {Path(target_dir / target_name)}')
+        if Path.is_file(target_file_delta):  # Если файл существует
+            print(f'Файл уже существует {target_file_delta}')
             continue
         else:
-
             df_ticks_file: pd = pd.read_csv(tick_file, delimiter=',')  # Считываем тиковые данные в DF
             previous_tick = 0
             direction_tick_up = True
@@ -92,9 +92,6 @@ def run(tick_files: list, delta_max_val: int, target_dir: Path):
 
             # Изменение типа колонок
             df[['<DATE>', '<TIME>', '<VOL>', '<DELTA>']] = df[['<DATE>', '<TIME>', '<VOL>', '<DELTA>']].astype(int)
-
-            # Составление пути к файлу
-            target_file_delta = Path(target_dir / target_name)
 
             df.to_csv(target_file_delta, index=False)  # Запись в файл для одного тикового файла
             df = df.iloc[0:0]
