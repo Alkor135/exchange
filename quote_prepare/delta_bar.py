@@ -7,24 +7,9 @@ from pathlib import *
 import pandas as pd
 
 
-class CurrentDeltaBar:
-    def __init__(self):
-        self.date = 0
-        self.time = 0
-        self.open = 0
-        self.high = 0
-        self.low = 0
-        self.close = 0
-        self.vol = 0
-        self.delta = 0
-        self.delta_time_sec = 0
-        self.max_vol_cluster = 0
-        self.max_volume = 0
-
-
 def run(tick_files: list, delta_max_val: int, target_dir: Path):
 
-    for ind_file, tick_file in enumerate(tick_files):  # Итерация по файлам
+    for ind_file, tick_file in enumerate(tick_files, start=1):  # Итерация по файлам
 
         list_split = re.split('_', tick_file.name, maxsplit=0)  # Разделение имени файла по '_'
         tiker = list_split[0]  # Получение тикера из имени файла
@@ -44,7 +29,6 @@ def run(tick_files: list, delta_max_val: int, target_dir: Path):
             df: pd = pd.DataFrame(columns='<DATE> <TIME> <OPEN> <HIGH> <LOW> <CLOSE> <VOL> <DELTA>'.split(' '))
 
             for tick in df_ticks_file.itertuples():  # Итерация по строкам тикового DF
-                # print(f'{tick[1]} {tick[2]}')
                 print('\rCompleted file: {:.2f}%. Completed files: {:.2f}%'.format(
                     tick[0] * 100 / len(df_ticks_file.index),
                     ind_file * 100 / len(tick_files)

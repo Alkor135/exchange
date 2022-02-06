@@ -2,19 +2,27 @@
 Скрипт из файлов с тиковыми данными делает файл с рандже барами
 """
 import re
+from datetime import datetime
 from pathlib import *
 
 import pandas as pd
 
 
+def zero_hour(cell):
+    """ Функция преобразует время (с финама приходят часы без нулей (с декабря 2021), которые pandas не воспринимает)"""
+    cell = f'{int(cell)}'
+    tmp_time = datetime.strptime(cell, "%H%M%S")
+    return tmp_time.strftime("%H%M%S")
+
+
 def run(tick_files: list[Path], razmer: int, target_dir: Path):
 
-    for ind_file, tick_file in enumerate(tick_files):  # Итерация по тиковым файлам
+    for ind_file, tick_file in enumerate(tick_files, start=1):  # Итерация по тиковым файлам
 
         list_split = re.split('_', tick_file.name, maxsplit=0)  # Разделение имени файла по '_'
         tiker = list_split[0]  # Получение тикера из имени файла
         date_quote_file = re.findall(r'\d+', str(tick_file))  # Получение цифр из пути к файлу
-        target_name = f'{tiker}_range_{date_quote_file[0]}.csv'  # Создание имени новому файлу
+        target_name = f'{tiker}_range_{date_quote_file[0]}.txt'  # Создание имени новому файлу
         target_file_range: Path = Path(target_dir / target_name)  # Составление пути к файлу
 
         if Path.is_file(target_file_range):
@@ -22,14 +30,11 @@ def run(tick_files: list[Path], razmer: int, target_dir: Path):
             continue
         else:
             df_ticks_file: pd = pd.read_csv(tick_file, delimiter=',')  # Считываем тиковые данные в DF
-            # previous_tick = 0
-            # direction_tick_up = True
 
             # Создание DF под рандже бары одного тикового файла
             df: pd = pd.DataFrame(columns='<DATE> <TIME> <OPEN> <HIGH> <LOW> <CLOSE> <VOL>'.split(' '))
 
             for tick in df_ticks_file.itertuples():  # Итерация по строкам тикового DF
-                # print(f'{tick[1]} {tick[2]}')
                 print('\rCompleted file: {:.2f}%. Completed files: {:.2f}%'.format(
                     tick[0] * 100 / len(df_ticks_file.index),
                     ind_file * 100 / len(tick_files)
@@ -69,8 +74,12 @@ def run(tick_files: list[Path], razmer: int, target_dir: Path):
 
             # Изменение типа колонок
             df[['<DATE>', '<TIME>', '<VOL>']] = df[['<DATE>', '<TIME>', '<VOL>']].astype(int)
+            # Преобразуем столбец <TIME>, где нужно добавив 0 перед часом
+            df['<TIME>'] = df.apply(lambda x: zero_hour(x['<TIME>']), axis=1)
 
             df.to_csv(target_file_range, index=False)  # Запись в файл для одного тикового файла
+
+        break
 
 
 if __name__ == "__main__":
