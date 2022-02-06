@@ -22,7 +22,7 @@ def run(tick_files: list[Path], razmer: int, target_dir: Path):
         list_split = re.split('_', tick_file.name, maxsplit=0)  # Разделение имени файла по '_'
         tiker = list_split[0]  # Получение тикера из имени файла
         date_quote_file = re.findall(r'\d+', str(tick_file))  # Получение цифр из пути к файлу
-        target_name = f'{tiker}_range_{date_quote_file[0]}.txt'  # Создание имени новому файлу
+        target_name = f'{tiker}_range{razmer}_{date_quote_file[0]}.txt'  # Создание имени новому файлу
         target_file_range: Path = Path(target_dir / target_name)  # Составление пути к файлу
 
         if Path.is_file(target_file_range):
@@ -45,32 +45,40 @@ def run(tick_files: list[Path], razmer: int, target_dir: Path):
                 if tick[0] == 0:
                     # Добавление строки в DF с рандже барами
                     df.loc[len(df.index)] = [int(tick[1]), int(tick[2]), tick[3], tick[3], tick[3], tick[3], tick[4]]
+                    continue
 
-                # Если бар сформирован по размеру
-                elif df.iloc[-1]['<LOW>'] < tick[3] - razmer:
-                    df.iloc[-1]['<CLOSE>'] = df.iloc[-1]['<LOW>'] + razmer
+                # Если бар сформирован по размеру возрастающий бар
+                if df.loc[len(df.index) - 1, '<LOW>'] + razmer < tick[3]:
+                    df.loc[len(df.index) - 1, '<CLOSE>'] = df.loc[len(df.index) - 1, '<LOW>'] + razmer
+                    df.loc[len(df.index) - 1, '<HIGH>'] = df.loc[len(df.index) - 1, '<CLOSE>']
                     # Добавление строки в DF с дельта барами
                     df.loc[len(df.index)] = [int(tick[1]), int(tick[2]), tick[3], tick[3], tick[3], tick[3], tick[4]]
+                    continue
+                    # break
 
-                elif df.iloc[-1]['<HIGH>'] > tick[3] + razmer:
-                    df.iloc[-1]['<CLOSE>'] = df.iloc[-1]['<HIGH>'] - razmer
+                # Если бар сформирован по размеру падающий бар
+                if df.loc[len(df) - 1, '<HIGH>'] - razmer > tick[3]:
+                    df.loc[len(df) - 1, '<CLOSE>'] = df.loc[len(df) - 1, '<HIGH>'] - razmer
+                    df.loc[len(df) - 1, '<LOW>'] = df.loc[len(df) - 1, '<CLOSE>']
                     # Добавление строки в DF с дельта барами
                     df.loc[len(df.index)] = [int(tick[1]), int(tick[2]), tick[3], tick[3], tick[3], tick[3], tick[4]]
+                    continue
+                    # break
 
                 # Заполняем(изменяем) последнюю строку DF с рандже баром --------------------------------------
                 # Записываем <CLOSE> --------------------------------------------------------------------------
-                df.loc[len(df) - 1, '<CLOSE>'] = tick[3]  # Записываем последнюю цену как цену close бара
+                df.loc[len(df.index) - 1, '<CLOSE>'] = tick[3]  # Записываем последнюю цену как цену close бара
 
                 # Записываем <HIGH> ---------------------------------------------------------------------------
                 if float(tick[3]) > df.loc[len(df) - 1, '<HIGH>']:  # Если цена последнего тика больше чем high
-                    df.loc[len(df) - 1, '<HIGH>'] = tick[3]  # Записываем цену последнего тика как high
+                    df.loc[len(df.index) - 1, '<HIGH>'] = tick[3]  # Записываем цену последнего тика как high
 
                 # Записываем <LOW> ----------------------------------------------------------------------------
-                if float(tick[3]) < df.loc[len(df) - 1, '<LOW>']:
-                    df.loc[len(df) - 1, '<LOW>'] = tick[3]  # Записываем цену последней сделки как low
+                if float(tick[3]) < df.loc[len(df.index) - 1, '<LOW>']:
+                    df.loc[len(df.index) - 1, '<LOW>'] = tick[3]  # Записываем цену последней сделки как low
 
                 # Записываем <VOL> ----------------------------------------------------------------------------
-                df.loc[len(df) - 1, '<VOL>'] += tick[4]  # Увеличиваем объем
+                df.loc[len(df.index) - 1, '<VOL>'] += tick[4]  # Увеличиваем объем
 
             # Изменение типа колонок
             df[['<DATE>', '<TIME>', '<VOL>']] = df[['<DATE>', '<TIME>', '<VOL>']].astype(int)
@@ -79,11 +87,11 @@ def run(tick_files: list[Path], razmer: int, target_dir: Path):
 
             df.to_csv(target_file_range, index=False)  # Запись в файл для одного тикового файла
 
-        break
+        # break
 
 
 if __name__ == "__main__":
-    razmer: int = 150
+    razmer: int = 250
     ticker: str = 'RTS'
     year_tick: str = '2022'
 
