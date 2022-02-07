@@ -93,7 +93,7 @@ def run(tick_files: list[Path], razmer: int, target_dir: Path):
 
 
 if __name__ == "__main__":
-    razmer: int = 250
+    razmer: int = 150
     ticker: str = 'RTS'
     year_tick: str = '2022'
 
