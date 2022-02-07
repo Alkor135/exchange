@@ -48,7 +48,8 @@ def run(tick_files: list[Path], razmer: int, target_dir: Path):
                     continue
 
                 # Если бар сформирован по размеру возрастающий бар
-                if df.loc[len(df.index) - 1, '<LOW>'] + razmer < tick[3]:
+                if ((df.loc[len(df.index) - 1, '<LOW>'] + razmer) < tick[3]) and\
+                        (df.loc[len(df.index) - 1, '<TIME>'] != tick[2]):
                     df.loc[len(df.index) - 1, '<CLOSE>'] = df.loc[len(df.index) - 1, '<LOW>'] + razmer
                     df.loc[len(df.index) - 1, '<HIGH>'] = df.loc[len(df.index) - 1, '<CLOSE>']
                     # Добавление строки в DF с дельта барами
@@ -57,7 +58,8 @@ def run(tick_files: list[Path], razmer: int, target_dir: Path):
                     # break
 
                 # Если бар сформирован по размеру падающий бар
-                if df.loc[len(df) - 1, '<HIGH>'] - razmer > tick[3]:
+                if ((df.loc[len(df) - 1, '<HIGH>'] - razmer) > tick[3]) and\
+                        (df.loc[len(df.index) - 1, '<TIME>'] != tick[2]):
                     df.loc[len(df) - 1, '<CLOSE>'] = df.loc[len(df) - 1, '<HIGH>'] - razmer
                     df.loc[len(df) - 1, '<LOW>'] = df.loc[len(df) - 1, '<CLOSE>']
                     # Добавление строки в DF с дельта барами
