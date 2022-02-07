@@ -2,9 +2,17 @@
 Скрипт из файлов с тиковыми данными делает файл с дельта барами
 """
 import re
+from datetime import datetime
 from pathlib import *
 
 import pandas as pd
+
+
+def zero_hour(cell):
+    """ Функция преобразует время (с финама приходят часы без нулей (с марта 2021), которые pandas не воспринимает)"""
+    cell = f'{int(cell)}'
+    tmp_time = datetime.strptime(cell, "%H%M%S")
+    return tmp_time.strftime("%H%M%S")
 
 
 def run(tick_files: list, delta_max_val: int, target_dir: Path):
@@ -76,6 +84,8 @@ def run(tick_files: list, delta_max_val: int, target_dir: Path):
 
             # Изменение типа колонок
             df[['<DATE>', '<TIME>', '<VOL>', '<DELTA>']] = df[['<DATE>', '<TIME>', '<VOL>', '<DELTA>']].astype(int)
+            # Преобразуем столбец <TIME>, где нужно добавив 0 перед часом
+            df['<TIME>'] = df.apply(lambda x: zero_hour(x['<TIME>']), axis=1)
 
             df.to_csv(target_file_delta, index=False)  # Запись в файл для одного тикового файла
             df = df.iloc[0:0]

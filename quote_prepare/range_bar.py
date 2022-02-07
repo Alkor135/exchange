@@ -9,7 +9,7 @@ import pandas as pd
 
 
 def zero_hour(cell):
-    """ Функция преобразует время (с финама приходят часы без нулей (с декабря 2021), которые pandas не воспринимает)"""
+    """ Функция преобразует время (с финама приходят часы без нулей (с марта 2021), которые pandas не воспринимает)"""
     cell = f'{int(cell)}'
     tmp_time = datetime.strptime(cell, "%H%M%S")
     return tmp_time.strftime("%H%M%S")
