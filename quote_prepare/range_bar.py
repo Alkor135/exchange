@@ -23,7 +23,7 @@ def run(tick_files: list[Path], razmer: int, target_dir: Path):
         tiker = list_split[0]  # Получение тикера из имени файла
         date_quote_file = re.findall(r'\d+', str(tick_file))  # Получение цифр из пути к файлу
         target_name = f'{tiker}_range{razmer}_{date_quote_file[0]}.txt'  # Создание имени новому файлу
-        target_file_range: Path = Path(target_dir / target_name)  # Составление пути к файлу
+        target_file_range: Path = Path(target_dir / target_name)  # Составление пути к новому файлу
 
         if Path.is_file(target_file_range):
             print(f'Файл уже существует {target_file_range}')
