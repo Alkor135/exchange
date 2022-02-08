@@ -19,7 +19,8 @@ symbol = 'RTS'
 20210104,100005,140530.0,141150.0,140530.0,140900.0,2851,-511
 20210104,100016,140890.0,141000.0,140800.0,141000.0,1390,515
 """
-df = pd.read_csv(Path('c:\data_quote\data_prepare_RTS_delta\SPFB.RTS_delta_20220119.csv'), delimiter=',')
+# df = pd.read_csv(Path('c:\data_quote\data_prepare_RTS_delta\SPFB.RTS_delta_20220119.csv'), delimiter=',')
+df = pd.read_csv(Path('c:\data_quote\data_prepare_RTS_range_max_vol\SPFB.RTS_range250_max_vol_20220119.txt'), delimiter=',')
 
 pd.set_option('max_rows', 5)  # Установка 5 строк вывода DF
 pd.set_option('display.max_columns', None)  # Сброс ограничений на число столбцов
@@ -47,7 +48,7 @@ df = df.set_index(pd.DatetimeIndex(df['<DATE_TIME>']))
 df.drop(labels=['<DATE_TIME>', '<DATE>', '<TIME>', '<VOL>'], axis=1, inplace=True)
 print(df)
 
-# создаем 4 окна
+# создаем окна
 ax = fplt.create_plot(symbol, rows=1)
 
 # рисуем свечной график в основном окне
@@ -63,6 +64,6 @@ fplt.candlestick_ochl(candles, ax=ax)
 # fplt.volume_ocv(delta, ax=ax3)
 
 # Проба дополнить график точками (нужно в будущем для отметки на графике макс объемов в кластере)
-# df.plot('<MAX_VOLUME_PRICE>', kind='scatter', style='o', color='#00f')
+df.plot('<MAX_VOLUME_PRICE>', kind='scatter', style='o', color='#00f')
 
 fplt.show()

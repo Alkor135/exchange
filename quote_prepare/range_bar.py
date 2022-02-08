@@ -21,7 +21,7 @@ def run(tick_files: list[Path], razmer: int, target_dir: Path):
 
         list_split = re.split('_', tick_file.name, maxsplit=0)  # Разделение имени файла по '_'
         tiker = list_split[0]  # Получение тикера из имени файла
-        date_quote_file = re.findall(r'\d+', str(tick_file))  # Получение цифр из пути к файлу
+        date_quote_file = re.findall(r'\d{8}', str(tick_file))  # Получение цифр из пути к файлу
         target_name = f'{tiker}_range{razmer}_{date_quote_file[0]}.txt'  # Создание имени новому файлу
         target_file_range: Path = Path(target_dir / target_name)  # Составление пути к новому файлу
 
@@ -47,7 +47,8 @@ def run(tick_files: list[Path], razmer: int, target_dir: Path):
                     df.loc[len(df.index)] = [int(tick[1]), int(tick[2]), tick[3], tick[3], tick[3], tick[3], tick[4]]
                     continue
 
-                # Если бар сформирован по размеру возрастающий бар
+                # Если бар сформирован по размеру и время нового тика не совпадает с временем начала бара
+                # Для возрастающий бар
                 if ((df.loc[len(df.index) - 1, '<LOW>'] + razmer) < tick[3]) and\
                         (df.loc[len(df.index) - 1, '<TIME>'] != tick[2]):
                     df.loc[len(df.index) - 1, '<CLOSE>'] = df.loc[len(df.index) - 1, '<LOW>'] + razmer
@@ -57,7 +58,8 @@ def run(tick_files: list[Path], razmer: int, target_dir: Path):
                     continue
                     # break
 
-                # Если бар сформирован по размеру падающий бар
+                # Если бар сформирован по размеру  и время нового тика не совпадает с временем начала бара
+                # Для падающий бар
                 if ((df.loc[len(df) - 1, '<HIGH>'] - razmer) > tick[3]) and\
                         (df.loc[len(df.index) - 1, '<TIME>'] != tick[2]):
                     df.loc[len(df) - 1, '<CLOSE>'] = df.loc[len(df) - 1, '<HIGH>'] - razmer
