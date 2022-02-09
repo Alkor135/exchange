@@ -42,16 +42,15 @@ plots = []
 fplt.display_timezone = timezone.utc
 
 # symbol = 'RTS'
-# Загружаем файлы в DF
+# Загружаем файл в DF
 df_first = pd.read_csv(
-    Path('c:\data_quote\data_prepare_VTBR_5m\VTBR_2021.csv'),
-    delimiter=','
-)
-df_second = pd.read_csv(
     Path('c:\data_quote\data_prepare_SBER_5m\SBER_2021.csv'),
     delimiter=','
 )
-
+df_second = pd.read_csv(
+    Path('c:\data_quote\data_prepare_VTBR_5m\VTBR_2021.csv'),
+    delimiter=','
+)
 
 pd.set_option('max_rows', 5)  # Установка 5 строк вывода DF
 pd.set_option('display.max_columns', None)  # Сброс ограничений на число столбцов
@@ -68,27 +67,33 @@ def plot_ema(df, ax):
     df['<CLOSE>'].ewm(span=18).mean().plot(ax=ax, legend='EMA')
 
 
-def prepare(df):
-    # Преобразуем столбец <TIME>, где нужно добавив 0 перед часом
-    df['<TIME>'] = df.apply(lambda x: zero_hour(x['<TIME>']), axis=1)
-    # Создаем новый столбец <DATE_TIME> слиянием столбцов <DATE> и <TIME>
-    df['<DATE_TIME>'] = df['<DATE>'].astype(str) + ' ' + df['<TIME>'].astype(str)
-    # Меняем индекс и делаем его типом datetime
-    df = df.set_index(pd.DatetimeIndex(df['<DATE_TIME>']))
-    # Удаляем ненужные колонки. axis=1 означает, что отбрасываем колонку а не индекс
-    df.drop(labels=['<DATE_TIME>', '<DATE>', '<TIME>', '<VOL>'], axis=1, inplace=True)
-    # return df[['<OPEN>', '<CLOSE>', '<HIGH>', '<LOW>']]
-
-
-df_first = prepare(df_first)
-df_second = prepare(df_second)
+# Преобразуем столбец <TIME>, где нужно добавив 0 перед часом
+df_first['<TIME>'] = df_first.apply(lambda x: zero_hour(x['<TIME>']), axis=1)
+# Создаем новый столбец <DATE_TIME> слиянием столбцов <DATE> и <TIME>
+df_first['<DATE_TIME>'] = df_first['<DATE>'].astype(str) + ' ' + df_first['<TIME>'].astype(str)
+# Меняем индекс и делаем его типом datetime
+df_first = df_first.set_index(pd.DatetimeIndex(df_first['<DATE_TIME>']))
+# Удаляем ненужные колонки. axis=1 означает, что отбрасываем колонку а не индекс
+df_first.drop(labels=['<DATE_TIME>', '<DATE>', '<TIME>', '<VOL>'], axis=1, inplace=True)
 candles_first = df_first[['<OPEN>', '<CLOSE>', '<HIGH>', '<LOW>']]
+
+# Преобразуем столбец <TIME>, где нужно добавив 0 перед часом
+df_second['<TIME>'] = df_second.apply(lambda x: zero_hour(x['<TIME>']), axis=1)
+# Создаем новый столбец <DATE_TIME> слиянием столбцов <DATE> и <TIME>
+df_second['<DATE_TIME>'] = df_second['<DATE>'].astype(str) + ' ' + df_second['<TIME>'].astype(str)
+# Меняем индекс и делаем его типом datetime
+df_second = df_second.set_index(pd.DatetimeIndex(df_second['<DATE_TIME>']))
+# Удаляем ненужные колонки. axis=1 означает, что отбрасываем колонку а не индекс
+df_second.drop(labels=['<DATE_TIME>', '<DATE>', '<TIME>', '<VOL>'], axis=1, inplace=True)
 candles_second = df_second[['<OPEN>', '<CLOSE>', '<HIGH>', '<LOW>']]
-fplt.candlestick_ochl(candles_first(df_first), ax=ax0)
-fplt.candlestick_ochl(candles_second(df_second), ax=ax1)
+
+
+fplt.candlestick_ochl(candles_first, ax=ax0)
+fplt.candlestick_ochl(candles_second, ax=ax1)
 
 df_first.plot('<MAX_VOLUME_PRICE>', kind='scatter', style='o', color='#00f', ax=ax0)
 df_second.plot('<MAX_VOLUME_PRICE>', kind='scatter', style='o', color='#00f', ax=ax1)
+
 
 fplt.show(qt_exec=False)  # prepares plots when they're all setup
 win.show()

@@ -34,22 +34,6 @@ def plot_ema(df, ax):
     df['<CLOSE>'].ewm(span=18).mean().plot(ax=ax, legend='EMA')
 
 
-# def plot_bubble_pass(price, price_col, size_col, min_val, max_val, scale, color, ax):
-#     price = price.copy()
-#     price.loc[(price[size_col] < min_val) | (price[size_col] > max_val), price_col] = np.nan
-#     fplt.plot(price[price_col], style='o', width=scale, color=color, ax=ax)
-#
-#
-# def plot_quote_bubbles(quotes, ax):
-#     quotes['mvc'] = np.sqrt(quotes['<MAX_VOLUME_CLUSTER>'])  # linearize by circle area
-#     size = quotes['mvc']
-#     rng = np.linspace(size.min(), size.max(), 5)
-#     rng = list(zip(rng[:-1], rng[1:]))
-#     for a, b in reversed(rng):
-#         scale = (a+b) / rng[-1][1] + 0.2
-#         plot_bubble_pass(quotes, '<MAX_VOLUME_PRICE>', '<MAX_VOLUME_CLUSTER>', a, b, scale=scale, color='#00f', ax=ax)
-
-
 # Преобразуем столбец <TIME>, где нужно добавив 0 перед часом
 df['<TIME>'] = df.apply(lambda x: zero_hour(x['<TIME>']), axis=1)
 

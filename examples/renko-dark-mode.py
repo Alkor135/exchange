@@ -15,6 +15,6 @@ fplt.cross_hair_color = w+'a'
 # plot renko + renko-transformed volume
 ax,axv = fplt.create_plot('US Brent Oil Renko [dark mode]', rows=2, maximize=False)
 plot = fplt.renko(df[['Close','Volume']], ax=ax) # let renko transform volume by passing it in as an extra column
-df_renko = plot.datasrc.df # names of new renko columns are time, open, close, high, low and whatever extras you pass in
+df_renko = plot.datasrc.df_first # names of new renko columns are time, open, close, high, low and whatever extras you pass in
 fplt.volume_ocv(df_renko[['time','open','close','Volume']], ax=axv)
 fplt.show()
