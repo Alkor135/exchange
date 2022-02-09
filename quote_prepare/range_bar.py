@@ -95,9 +95,9 @@ def run(tick_files: list[Path], razmer: int, target_dir: Path):
 
 
 if __name__ == "__main__":
-    razmer: int = 150
+    razmer: int = 250
     ticker: str = 'RTS'
-    year_tick: str = '2022'
+    year_tick: str = '2021'
 
     source_dir_tick: Path = Path(f'c:/data_quote/data_finam_{ticker}_tick')  # Путь к ресурсному каталогу
     target_dir: Path = Path(f'c:/data_quote/data_prepare_{ticker}_range')  # Путь к целевому каталогу

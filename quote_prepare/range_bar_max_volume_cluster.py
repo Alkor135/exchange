@@ -88,7 +88,7 @@ def run(tick_files: list[Path], range_files: list[Path], razmer: int, target_dir
 if __name__ == "__main__":
     razmer: int = 250
     ticker: str = 'RTS'
-    year_tick: str = '2022'
+    year_tick: str = '2021'
 
     source_dir_tick: Path = Path(f'c:/data_quote/data_finam_{ticker}_tick')  # Путь к ресурсному каталогу с тиками
     source_dir_range: Path = Path(f'c:/data_quote/data_prepare_{ticker}_range')  # Путь к ресурсному каталогу с range
