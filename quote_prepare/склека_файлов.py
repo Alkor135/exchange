@@ -31,7 +31,6 @@ if __name__ == "__main__":
     ticker: str = 'RTS'
     year: str = '2021'
 
-    # source_dir_tick: Path = Path(f'c:/data_quote/data_prepare_{ticker}_range')  # Путь к ресурсному каталогу
     source_dir_tick: Path = Path(f'c:\data_quote\data_prepare_{ticker}_range_max_vol')  # Путь к ресурсному каталогу
     target_dir: Path = Path(f'c:\data_quote\data_prepare_{ticker}_range_max_vol')  # Путь к целевому каталогу
 
