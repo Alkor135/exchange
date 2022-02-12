@@ -40,7 +40,7 @@ def run(files: list[Path], razmer: int, target_dir: Path, tick: int):
             print('\rCompleted file: {:.2f}%. Completed files: {:.2f}%'.format(
                 row[0] * 100 / len(df.index),
                 ind_file * 100 / len(files)
-            ),
+                ),
                 end=''
             )
 
