@@ -108,6 +108,7 @@ def run(files: list[Path], razmer: int, target_dir: Path, tick: int):
                     df.loc[row[0], '<TP_SL>'] = 3
                     break
         print(df)
+
         break
 
 
