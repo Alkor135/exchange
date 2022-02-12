@@ -40,7 +40,7 @@ def run(files: list[Path], razmer: int, target_dir: Path, tick: int):
             print('\rCompleted file: {:.2f}%. Completed files: {:.2f}%'.format(
                 row[0] * 100 / len(df.index),
                 ind_file * 100 / len(files)
-                ),
+            ),
                 end=''
             )
 
@@ -76,13 +76,38 @@ def run(files: list[Path], razmer: int, target_dir: Path, tick: int):
                 low_tmp = row_tmp[5]
                 close_tmp = row_tmp[6]
 
-                if up and low_tmp <= sl and df.loc[row[0], '<TP_SL>'] == 0:
+                # Для баров на повышение
+                if up and low_tmp <= sl and df.loc[row[0], '<TP_SL>'] == 0:  # SL
                     df.loc[row[0], '<TP_SL>'] = -1
-                elif up and low_tmp <= sl and (df.loc[row[0], '<TP_SL>'] == 1 or
+                    break
+                elif up and low_tmp <= sl and (df.loc[row[0], '<TP_SL>'] == 1 or  # End TP
                                                df.loc[row[0], '<TP_SL>'] == 2 or
                                                df.loc[row[0], '<TP_SL>'] == 3):
-                    continue
+                    break
+                elif up and high_tmp > tp1 and df.loc[row[0], '<TP_SL>'] == 0:  # TP1
+                    df.loc[row[0], '<TP_SL>'] = 1
+                elif up and high_tmp > tp2 and df.loc[row[0], '<TP_SL>'] == 1:  # TP2
+                    df.loc[row[0], '<TP_SL>'] = 2
+                elif up and high_tmp > tp3 and df.loc[row[0], '<TP_SL>'] == 2:  # TP3
+                    df.loc[row[0], '<TP_SL>'] = 3
+                    break
 
+                # Для баров на понижение
+                if not up and high_tmp >= sl and df.loc[row[0], '<TP_SL>'] == 0:  # SL
+                    df.loc[row[0], '<TP_SL>'] = -1
+                    break
+                elif not up and high_tmp >= sl and (df.loc[row[0], '<TP_SL>'] == 1 or  # End TP
+                                                    df.loc[row[0], '<TP_SL>'] == 2 or
+                                                    df.loc[row[0], '<TP_SL>'] == 3):
+                    break
+                elif not up and low_tmp < tp1 and df.loc[row[0], '<TP_SL>'] == 0:  # TP1
+                    df.loc[row[0], '<TP_SL>'] = 1
+                elif not up and low_tmp < tp1 and df.loc[row[0], '<TP_SL>'] == 1:  # TP2
+                    df.loc[row[0], '<TP_SL>'] = 2
+                elif not up and low_tmp < tp1 and df.loc[row[0], '<TP_SL>'] == 2:  # TP3
+                    df.loc[row[0], '<TP_SL>'] = 3
+                    break
+        print(df)
         break
 
 
