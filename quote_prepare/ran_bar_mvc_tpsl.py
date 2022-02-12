@@ -78,6 +78,7 @@ def run(files: list[Path], razmer: int, target_dir: Path, tick: int):
 
                 if up and low_tmp <= sl and df.loc[row[0], '<TP_SL>'] == 0:
                     df.loc[row[0], '<TP_SL>'] = -1
+                    continue
                 elif up and low_tmp <= sl and (df.loc[row[0], '<TP_SL>'] == 1 or
                                                df.loc[row[0], '<TP_SL>'] == 2 or
                                                df.loc[row[0], '<TP_SL>'] == 3):
