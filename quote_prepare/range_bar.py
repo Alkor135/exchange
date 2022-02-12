@@ -102,6 +102,8 @@ if __name__ == "__main__":
     source_dir_tick: Path = Path(f'c:/data_quote/data_finam_{ticker}_tick')  # Путь к ресурсному каталогу
     target_dir: Path = Path(f'c:/data_quote/data_prepare_{ticker}_range')  # Путь к целевому каталогу
 
+    if not target_dir.is_dir(): target_dir.mkdir()  # Создание каталога
+
     # Создание списка путей к файлам с тиками
     tick_files: list[Path] = list(source_dir_tick.glob(f'*{year_tick}*.csv'))
 

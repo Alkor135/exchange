@@ -41,7 +41,6 @@ def run(tick_files: list[Path], range_files: list[Path], razmer: int, target_dir
         # df_tick['<TIME>'] = df_tick.apply(lambda x: zero_hour(x['<TIME>']), axis=1)
 
         for row_range_bar in df.itertuples():
-            # print(row_range_bar)
 
             # Индикация прогресса
             print('\rCompleted file: {:.2f}%. Completed files: {:.2f}%'.format(
