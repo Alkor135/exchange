@@ -68,7 +68,7 @@ def run(files: list[Path], razmer: int, target_dir: Path, tick: int):
                 continue
             # print(f'   {sl=} {tp1=} {tp2=} {tp3=}')
 
-            df_tmp = df[row[0] + 1: len(df.index)]
+            df_tmp = df[row[0] + 1: len(df.index)]  # Временный DF для нахождения бара выхода
             # print(df_tmp)
             for row_tmp in df_tmp.itertuples():
                 open_tmp = row_tmp[3]
