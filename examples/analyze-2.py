@@ -8,7 +8,7 @@ import yfinance as yf
 
 btc = yf.download('BTC-USD', '2014-09-01')
 
-ax1,ax2,ax3,ax4,ax5 = fplt.create_plot('Bitcoin/Dollar long term analysis', rows=5, maximize=False)
+ax1, ax2, ax3, ax4, ax5 = fplt.create_plot('Bitcoin/Dollar long term analysis', rows=5, maximize=False)
 fplt.set_y_scale(ax=ax1, yscale='log')
 
 fplt.plot(btc.Close, color='#000', legend='Log price', ax=ax1)
@@ -17,7 +17,7 @@ btc['ma50'] = btc.Close.rolling(50).mean()
 fplt.plot(btc.ma200, legend='MA200', ax=ax1)
 fplt.plot(btc.ma50, legend='MA50', ax=ax1)
 btc['one'] = 1
-fplt.volume_ocv(btc[['ma200','ma50','one']], candle_width=1, ax=ax1.overlay(scale=0.02))
+fplt.volume_ocv(btc[['ma200', 'ma50', 'one']], candle_width=1, ax=ax1.overlay(scale=0.02))
 
 daily_ret = btc.Close.pct_change()*100
 fplt.plot(daily_ret, width=3, color='#000', legend='Daily returns %', ax=ax2)

@@ -18,9 +18,7 @@ def zero_hour(cell):
 
 
 def run(files: list[Path], razmer: int, target_dir: Path, tick: int):
-    print(files)
     for ind_file, file in enumerate(files, start=1):  # Итерация по файлам
-        print('for')
 
         list_split = re.split('_', file.name, maxsplit=0)  # Разделение имени файла по '_'
         tiker = list_split[0]  # Получение тикера из имени файла
@@ -107,15 +105,16 @@ def run(files: list[Path], razmer: int, target_dir: Path, tick: int):
                 elif not up and low_tmp < tp1 and df.loc[row[0], '<TP_SL>'] == 2:  # TP3
                     df.loc[row[0], '<TP_SL>'] = 3
                     break
-        print(df)
 
-        break
+            df.to_csv(target_file_range, index=False)  # Запись в файл для одного тикового файла
+        # print(df)
+        # break
 
 
 if __name__ == "__main__":
     razmer: int = 250
     ticker: str = 'RTS'
-    year: str = '2021'
+    year: str = '2022'
     tick: int = 10
 
     source_dir: Path = Path(f'c:\data_quote\data_prepare_{ticker}_range_max_vol')  # Путь к ресурсному каталогу
