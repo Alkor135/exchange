@@ -19,7 +19,7 @@ symbol = 'RTS'
 20220119,70002,137290.0,137270.0,137020.0,137270.0,268,137100.0,39,-1
 """
 df = pd.read_csv(
-    Path('c:\data_quote\data_prepare_RTS_range_mvc_tpsl\SPFB.RTS_range250_mvc_tpsl_20220119.txt'),
+    Path('c:\data_quote\data_prepare_RTS_range_mvc_tpsl\SPFB.RTS_range250_mvc_tpsl_20220103.txt'),
     delimiter=','
 )
 
@@ -59,10 +59,10 @@ fplt.candlestick_ochl(df[['<OPEN>', '<CLOSE>', '<HIGH>', '<LOW>']], ax=ax1)
 fplt.plot(df['<MAX_VOLUME_PRICE>'], kind='scatter', style='o', color='#00f', ax=ax1)
 
 # Рисуем TPSL
-fplt.volume_ocv(df[['<OPEN>', '<CLOSE>', '<TP_SL>']], ax=ax2)  # Рисуется только в плюс
+# fplt.volume_ocv(df[['<OPEN>', '<CLOSE>', '<TP_SL>']], ax=ax2)  # Рисуется только в плюс
 # fplt.volume_ocv(df[['<OPEN>', '<CLOSE>', '<TP_SL>']], kind='bar', ax=ax2)  # Ошибка
 # fplt.bar(df[['<OPEN>', '<CLOSE>', '<TP_SL>']], ax=ax2)  # Вообще ничего не видно
-fplt.bar(df['<TP_SL>'], ax=ax2)  # Не синхронный масштаб. отображение отличное
+# fplt.bar(df['<TP_SL>'], ax=ax2)  # Не синхронный масштаб. отображение отличное
 # fplt.bar(df[['<TP_SL>']], ax=ax2)  # Не синхронный масштаб. отображение отличное
 # fplt.plot(df['<TP_SL>'], ax=ax2, kind='bar')  # Отрисовка линиями
 # fplt.plot(df[['<TP_SL>']], ax=ax2, kind='bar')  # Отрисовка линиями
@@ -73,6 +73,7 @@ fplt.bar(df['<TP_SL>'], ax=ax2)  # Не синхронный масштаб. о�
 # df['<TP_SL>'].plot.bar(ax=ax2)  # Не синхронный масштаб. отображение отличное
 
 # fplt.volume_ocv(df[['<OPEN>', '<CLOSE>', '<TP_SL>']], ax=ax2)
-# fplt.bar(df['<TP_SL>'], ax=ax2)
+fplt.plot(df['<TP_SL>'], ax=ax2)
+fplt.volume_ocv(df[['<OPEN>', '<CLOSE>', '<TP_SL>']], ax=ax2)
 
 fplt.show()

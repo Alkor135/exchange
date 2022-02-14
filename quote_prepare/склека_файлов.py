@@ -34,7 +34,7 @@ if __name__ == "__main__":
     source_dir_tick: Path = Path(f'c:\data_quote\data_prepare_{ticker}_range_max_vol')  # Путь к ресурсному каталогу
     target_dir: Path = Path(f'c:\data_quote\data_prepare_{ticker}_range_max_vol')  # Путь к целевому каталогу
 
-    # Создание списка путей к файлам с тиками
+    # Создание списка путей к файлам
     files_path: list[Path] = list(source_dir_tick.glob(f'*{razmer}*{year}*.txt'))
 
     run(files_path, razmer, year, target_dir)
