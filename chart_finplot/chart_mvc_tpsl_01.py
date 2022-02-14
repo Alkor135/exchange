@@ -43,7 +43,7 @@ if __name__ == "__main__":
     """
     # Загружаем файл в DF
     df = pd.read_csv(
-        Path('c:\data_quote\data_prepare_RTS_range_mvc_tpsl\SPFB.RTS_range250_mvc_tpsl_20220103.txt'),
+        Path('c:\data_quote\data_prepare_RTS_range_mvc_tpsl\SPFB.RTS_range250_mvc_tpsl_20220125.txt'),
         delimiter=','
     )
     # Настройки отображения DF

@@ -78,9 +78,7 @@ def run(files: list[Path], razmer: int, target_dir: Path, tick: int):
                 if up and low_tmp <= sl and df.loc[row[0], '<TP_SL>'] == 0:  # SL
                     df.loc[row[0], '<TP_SL>'] = -1
                     break
-                elif up and low_tmp <= sl and (df.loc[row[0], '<TP_SL>'] == 1 or  # End TP
-                                               df.loc[row[0], '<TP_SL>'] == 2 or
-                                               df.loc[row[0], '<TP_SL>'] == 3):
+                elif up and low_tmp <= sl and (df.loc[row[0], '<TP_SL>'] != 0):
                     break
                 elif up and high_tmp > tp1 and df.loc[row[0], '<TP_SL>'] == 0:  # TP1
                     df.loc[row[0], '<TP_SL>'] = 1
@@ -94,15 +92,13 @@ def run(files: list[Path], razmer: int, target_dir: Path, tick: int):
                 if not up and high_tmp >= sl and df.loc[row[0], '<TP_SL>'] == 0:  # SL
                     df.loc[row[0], '<TP_SL>'] = -1
                     break
-                elif not up and high_tmp >= sl and (df.loc[row[0], '<TP_SL>'] == 1 or  # End TP
-                                                    df.loc[row[0], '<TP_SL>'] == 2 or
-                                                    df.loc[row[0], '<TP_SL>'] == 3):
+                elif not up and high_tmp >= sl and (df.loc[row[0], '<TP_SL>'] != 0):
                     break
                 elif not up and low_tmp < tp1 and df.loc[row[0], '<TP_SL>'] == 0:  # TP1
                     df.loc[row[0], '<TP_SL>'] = 1
-                elif not up and low_tmp < tp1 and df.loc[row[0], '<TP_SL>'] == 1:  # TP2
+                elif not up and low_tmp < tp2 and df.loc[row[0], '<TP_SL>'] == 1:  # TP2
                     df.loc[row[0], '<TP_SL>'] = 2
-                elif not up and low_tmp < tp1 and df.loc[row[0], '<TP_SL>'] == 2:  # TP3
+                elif not up and low_tmp < tp3 and df.loc[row[0], '<TP_SL>'] == 2:  # TP3
                     df.loc[row[0], '<TP_SL>'] = 3
                     break
 
@@ -114,7 +110,7 @@ def run(files: list[Path], razmer: int, target_dir: Path, tick: int):
 if __name__ == "__main__":
     razmer: int = 250
     ticker: str = 'RTS'
-    year: str = '2022'
+    year: str = '2021'
     tick: int = 10
 
     source_dir: Path = Path(f'c:\data_quote\data_prepare_{ticker}_range_max_vol')  # Путь к ресурсному каталогу

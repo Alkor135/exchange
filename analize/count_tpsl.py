@@ -25,7 +25,8 @@ def run(files_path, razmer, year):
         print(file.name)
         print(df['<TP_SL>'].value_counts())
         print(df['<TP_SL>'].value_counts(normalize=True))
-        print(f'-1:{rez[-1]}, +1:{rez[3]+rez[1]+rez[2]}   Разница: {rez[3]*3-(rez[-1]+rez[1]+rez[2])}')
+        print(df['<TP_SL>'].value_counts().idxmax())
+        print(f'-1:{rez[-1]}, +1:{rez[3]+rez[1]+rez[2]}   Разница: {rez[3]*3-(rez[-1]+rez[1]+rez[2])}\n')
         raznica += (rez[3]*3-(rez[-1]+rez[1]+rez[2]))
         # print(df.groupby('<TIME>')['<TP_SL>'].value_counts())
         # break
@@ -39,9 +40,9 @@ def run(files_path, razmer, year):
 if __name__ == "__main__":
     razmer: int = 250
     ticker: str = 'RTS'
-    year: str = '2021'
+    year: str = '2022'
 
-    source_dir: Path = Path(f'c:\data_quote\data_prepare_RTS_range_mvc_tpsl')  # Путь к ресурсному каталогу
+    source_dir: Path = Path(f'c:\data_quote\data_prepare_{ticker}_range_mvc_tpsl')  # Путь к ресурсному каталогу
 
     # Создание списка путей к файлам
     files_path: list[Path] = list(source_dir.glob(f'*{razmer}*{year}*.txt'))
