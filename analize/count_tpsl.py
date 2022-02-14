@@ -20,7 +20,7 @@ def run(files_path, razmer, year):
         tiker = list_split[0]  # Получение тикера из имени файла
 
         df = pd.read_csv(file, delimiter=',')  # Считываем данные в DF
-        result = result.append(df)
+
         rez = df['<TP_SL>'].value_counts()
         print(file.name)
         print(df['<TP_SL>'].value_counts())
