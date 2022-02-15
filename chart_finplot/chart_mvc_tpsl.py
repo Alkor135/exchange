@@ -52,6 +52,7 @@ print(df)
 # создаем окна
 ax1, ax2 = fplt.create_plot(symbol, rows=2)
 # ax1 = fplt.create_plot(symbol, rows=1)
+ax2.setXLink(ax1)
 
 # рисуем свечной график в основном окне
 fplt.candlestick_ochl(df[['<OPEN>', '<CLOSE>', '<HIGH>', '<LOW>']], ax=ax1)
@@ -59,21 +60,7 @@ fplt.candlestick_ochl(df[['<OPEN>', '<CLOSE>', '<HIGH>', '<LOW>']], ax=ax1)
 fplt.plot(df['<MAX_VOLUME_PRICE>'], kind='scatter', style='o', color='#00f', ax=ax1)
 
 # Рисуем TPSL
-# fplt.volume_ocv(df[['<OPEN>', '<CLOSE>', '<TP_SL>']], ax=ax2)  # Рисуется только в плюс
-# fplt.volume_ocv(df[['<OPEN>', '<CLOSE>', '<TP_SL>']], kind='bar', ax=ax2)  # Ошибка
-# fplt.bar(df[['<OPEN>', '<CLOSE>', '<TP_SL>']], ax=ax2)  # Вообще ничего не видно
-# fplt.bar(df['<TP_SL>'], ax=ax2)  # Не синхронный масштаб. отображение отличное
-# fplt.bar(df[['<TP_SL>']], ax=ax2)  # Не синхронный масштаб. отображение отличное
-# fplt.plot(df['<TP_SL>'], ax=ax2, kind='bar')  # Отрисовка линиями
-# fplt.plot(df[['<TP_SL>']], ax=ax2, kind='bar')  # Отрисовка линиями
-
-# df.plot('<TP_SL>', kind='candle', ax=ax2)  # Не то
-# df.plot('<TP_SL>', kind='volume', ax=ax2)  # Ничего не видно
-# df.plot('<TP_SL>', kind='bar', ax=ax2)  # Не синхронный масштаб. отображение отличное
-# df['<TP_SL>'].plot.bar(ax=ax2)  # Не синхронный масштаб. отображение отличное
-
-# fplt.volume_ocv(df[['<OPEN>', '<CLOSE>', '<TP_SL>']], ax=ax2)
-fplt.plot(df['<TP_SL>'], ax=ax2)
-fplt.volume_ocv(df[['<OPEN>', '<CLOSE>', '<TP_SL>']], ax=ax2)
+fplt.bar(df['<TP_SL>'], ax=ax2)  # Не синхронный масштаб. отображение отличное
+ax2.setXLink(ax1)  # Для синхронизации осей Х
 
 fplt.show()

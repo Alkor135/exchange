@@ -25,7 +25,7 @@ def run(files_path, razmer, year):
         print(file.name)
         print(df['<TP_SL>'].value_counts())
         print(df['<TP_SL>'].value_counts(normalize=True))
-        print(df['<TP_SL>'].value_counts().idxmax())
+        # print(df['<TP_SL>'].value_counts().idxmax())  # Индекс максимального по количеству
         print(f'-1:{rez[-1]}, +1:{rez[3]+rez[1]+rez[2]}   Разница: {rez[3]*3-(rez[-1]+rez[1]+rez[2])}\n')
         raznica += (rez[3]*3-(rez[-1]+rez[1]+rez[2]))
         # print(df.groupby('<TIME>')['<TP_SL>'].value_counts())

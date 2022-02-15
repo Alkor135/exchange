@@ -33,13 +33,13 @@ def dataframe_datetime_prepare(df: pd) -> pd:
 
 
 def run(files_path, razmer, year):
-    result: pd = pd.DataFrame()
-    for ind_file, file in enumerate(files_path, start=1):  # Итерация по тиковым файлам
-        # result: pd = pd.DataFrame()
+    # result: pd = pd.DataFrame()
+    for ind_file, file in enumerate(files_path, start=1):  # Итерация по файлам
+        result: pd = pd.DataFrame()
         df = pd.read_csv(file, delimiter=',')  # Считываем данные в DF
         df = dataframe_datetime_prepare(df)
 
-        for row in df.itertuples():
+        for row in df.itertuples():  # Итерация по рандже барам
             if row[0].hour not in result.columns:  # Если столбец с таким часом не существует
                 result[row[0].hour] = [0, 0]  # Создаем столбец, заполняем нулями
 
@@ -47,10 +47,11 @@ def run(files_path, razmer, year):
                 result.loc[0, row[0].hour] += 3  #
             elif row[7] == -1:
                 result.loc[0, row[0].hour] -= 1
-        # print(result)
-        # print()
+        print(file.name)
+        print(result)
+        print()
 
-    print(result)
+    # print(result)
 
 
 if __name__ == "__main__":

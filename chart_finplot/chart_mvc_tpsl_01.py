@@ -25,11 +25,8 @@ def plot_candlestick(df, ax):
 
 
 def plot_tpsl(df, ax):
+    # ax.setXLink(True)
     df['<TP_SL>'].plot(ax=ax, kind='bar')  # Не синхронный масштаб. отображение отличное  , kind='bar'
-
-
-def plot_tpsl1(df, ax):
-    df['<TP_SL>'].plot(ax=ax)  # Не синхронный масштаб. отображение отличное  , kind='bar'
 
 
 if __name__ == "__main__":
@@ -43,7 +40,7 @@ if __name__ == "__main__":
     """
     # Загружаем файл в DF
     df = pd.read_csv(
-        Path('c:\data_quote\data_prepare_RTS_range_mvc_tpsl\SPFB.RTS_range250_mvc_tpsl_20220125.txt'),
+        Path('c:\data_quote\data_prepare_RTS_range_mvc_tpsl\SPFB.RTS_range250_mvc_tpsl_20220119.txt'),
         delimiter=','
     )
     # Настройки отображения DF
@@ -58,28 +55,10 @@ if __name__ == "__main__":
     print(df)
 
     # Построение графика
-    ax1, ax2, ax3 = fplt.create_plot(symbol, rows=3)  # Cоздаем окна
+    ax1, ax2 = fplt.create_plot(symbol, rows=2)  # Cоздаем окна
     plot_tpsl(df, ax2)  #
-    plot_tpsl1(df, ax3)  #
     plot_candlestick(df, ax1)  # рисуем свечной график в основном окне
 
-
-
-    # Рисуем TPSL
-    # fplt.volume_ocv(df[['<OPEN>', '<CLOSE>', '<TP_SL>']], ax=ax2)  # Рисуется только в плюс
-    # fplt.volume_ocv(df[['<OPEN>', '<CLOSE>', '<TP_SL>']], kind='bar', ax=ax2)  # Ошибка
-    # fplt.bar(df[['<OPEN>', '<CLOSE>', '<TP_SL>']], ax=ax2)  # Вообще ничего не видно
-    # fplt.bar(df['<TP_SL>'], ax=ax2)  # Не синхронный масштаб. отображение отличное
-    # fplt.bar(df[['<TP_SL>']], ax=ax2)  # Не синхронный масштаб. отображение отличное
-    # fplt.plot(df['<TP_SL>'], ax=ax2, kind='bar')  # Отрисовка линиями
-    # fplt.plot(df[['<TP_SL>']], ax=ax2, kind='bar')  # Отрисовка линиями
-
-    # df.plot('<TP_SL>', kind='candle', ax=ax2)  # Не то
-    # df.plot('<TP_SL>', kind='volume', ax=ax2)  # Ничего не видно
-    # df.plot('<TP_SL>', kind='bar', ax=ax2)  # Не синхронный масштаб. отображение отличное
-    # df['<TP_SL>'].plot.bar(ax=ax2)  # Не синхронный масштаб. отображение отличное
-
-    # fplt.volume_ocv(df[['<OPEN>', '<CLOSE>', '<TP_SL>']], ax=ax2)
-    # fplt.bar(df['<TP_SL>'], ax=ax2)
+    ax2.setXLink(ax1)  # Для синхронизации осей Х
 
     fplt.show()
