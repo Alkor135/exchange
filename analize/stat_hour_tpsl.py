@@ -41,7 +41,7 @@ def run(files_path, razmer, year):
                 print('first')
                 if row[7] == 3:
                     print('second')
-                    result[row[0].hour] += 1
+                    result.loc[0, row[0].hour] = 1
             else:
                 # result.insert(0, row[0].hour, 0)
                 result[row[0].hour] = 0
