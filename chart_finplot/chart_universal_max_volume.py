@@ -3,6 +3,7 @@
 """
 from pathlib import *
 from datetime import datetime, timezone
+from typing import Any
 
 import pandas as pd
 import numpy as np
@@ -23,10 +24,10 @@ pd.set_option('max_rows', 5)  # Установка 5 строк вывода DF
 pd.set_option('display.max_columns', None)  # Сброс ограничений на число столбцов
 
 
-def zero_hour(cell):
+def zero_hour(cell: Any) -> str:
     """ Функция преобразует время (с финама приходят часы без нулей (с декабря 2021), которые pandas не воспринимает)"""
-    cell = f'{int(cell)}'
-    tmp_time = datetime.strptime(cell, "%H%M%S")
+    cell: str = f'{int(cell)}'
+    tmp_time: datetime = datetime.strptime(cell, "%H%M%S")
     return tmp_time.strftime("%H%M%S")
 
 
