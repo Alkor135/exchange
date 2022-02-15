@@ -56,12 +56,8 @@ def service():
             # print('Clear:', messages)
             for message in messages:
                 message = message.decode()  # переводим из бинарной кодировки в utf8
-                # print(f'utf-8 кодировка {message}')
                 message = message.split(' ')
-                # if message[0] == '1' and message[1] == ticker:
-                # if message[0] == '2':
-                if message[0] == '1':
-                    print(f'Помещаем в очередь {message}')
+                if message[0] == '1' and message[1] == ticker:
                     queue.put(message)  # Помещаем в очередь данные от клиента
 
     conn.close()  # если клиент закрыл соединение то и мы закрываем соединение
