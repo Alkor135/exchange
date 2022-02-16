@@ -15,7 +15,7 @@ def zero_hour(cell):
     return tmp_time.strftime("%H%M%S")
 
 
-def run(files: list[Path], razmer: int, target_dir: Path, tick: int):
+def run(files: list[Path], razmer: int, target_dir: Path):
     for ind_file, file in enumerate(files, start=1):  # Итерация по файлам
 
         list_split = re.split('_', file.name, maxsplit=0)  # Разделение имени файла по '_'
@@ -29,7 +29,11 @@ def run(files: list[Path], razmer: int, target_dir: Path, tick: int):
             continue
 
         df: pd = pd.read_csv(file, delimiter=',')  # Загрузка в DF range файла
-        df['<SEC>'] = 0  # Создание новой колонки
+        df['<SEC>'] = 900  # Создание новой колонки под время формирования бара
+        df['<PER>'] = 2  # Создание новой колонки под процент макс объема
+        # print(df)
+        # print(len(df.index))
+        # break
 
         for row in df.itertuples():
             # Индикация прогресса
@@ -44,61 +48,25 @@ def run(files: list[Path], razmer: int, target_dir: Path, tick: int):
             high = row[4]
             low = row[5]
             close = row[6]
-            up = None
-            rez = 0
+            cluster = row[8]
 
-            if close == high:  # На повышение
-                up = True  # Бар на повышение
-                sl = low - tick  # Уровень СЛ для бара на повышение
-                tp1 = high + tick + (high + tick - sl)  # Уровень ТП1 для бара на повышение
-                tp2 = high + tick + (high + tick - sl) * 2   # Уровень ТП2 для бара на повышение
-                tp3 = high + tick + (high + tick - sl) * 3   # Уровень ТП2 для бара на повышение
-            elif close == low:  # На понижение
-                up = False  # Бар на понижение
-                sl = high + tick  # Уровень СЛ для бара на понижение
-                tp1 = low - tick - (sl - low + tick)  # Уровень ТП1 для бара на понижение
-                tp2 = low - tick - (sl - low + tick) * 2  # Уровень ТП2 для бара на понижение
-                tp3 = low - tick - (sl - low + tick) * 3  # Уровень ТП3 для бара на понижение
-            else:
-                up = None
-                continue
+            if (high - low) > 0:
+                if close == high:  # На повышение
+                    df.loc[row[0], '<PER>'] = (cluster - low) / (high - low)
+                elif close == low:  # На понижение
+                    df.loc[row[0], '<PER>'] = (high - cluster) / (high - low)
 
-            df_tmp = df[row[0] + 1: len(df.index)]  # Временный DF из последующих за исследуемым баров
-            for row_tmp in df_tmp.itertuples():  # Перебор последующих баров для опр. СЛ и ТП
-                open_tmp = row_tmp[3]
-                high_tmp = row_tmp[4]
-                low_tmp = row_tmp[5]
-                close_tmp = row_tmp[6]
+            if row[0] != len(df.index) - 1:  # Если это не последняя строка
+                current_dt = f"{df.loc[row[0], '<DATE>']} {df.loc[row[0], '<TIME>']}"  # Время откр. текущего бара
+                current_dt = datetime.strptime(current_dt, '%Y%m%d %H%M%S')
 
-                # Для баров на повышение
-                if up and low_tmp <= sl and df.loc[row[0], '<TP_SL>'] == 0:  # SL
-                    df.loc[row[0], '<TP_SL>'] = -1
-                    break
-                elif up and low_tmp <= sl and (df.loc[row[0], '<TP_SL>'] != 0):
-                    break
-                elif up and high_tmp > tp1 and df.loc[row[0], '<TP_SL>'] == 0:  # TP1
-                    df.loc[row[0], '<TP_SL>'] = 1
-                elif up and high_tmp > tp2 and df.loc[row[0], '<TP_SL>'] == 1:  # TP2
-                    df.loc[row[0], '<TP_SL>'] = 2
-                elif up and high_tmp > tp3 and df.loc[row[0], '<TP_SL>'] == 2:  # TP3
-                    df.loc[row[0], '<TP_SL>'] = 3
-                    break
+                next_dt = f"{df.loc[row[0]+1, '<DATE>']} {df.loc[row[0]+1, '<TIME>']}"  # Время откр. следующего бара
+                next_dt = datetime.strptime(next_dt, '%Y%m%d %H%M%S')
 
-                # Для баров на понижение
-                if not up and high_tmp >= sl and df.loc[row[0], '<TP_SL>'] == 0:  # SL
-                    df.loc[row[0], '<TP_SL>'] = -1
-                    break
-                elif not up and high_tmp >= sl and (df.loc[row[0], '<TP_SL>'] != 0):
-                    break
-                elif not up and low_tmp < tp1 and df.loc[row[0], '<TP_SL>'] == 0:  # TP1
-                    df.loc[row[0], '<TP_SL>'] = 1
-                elif not up and low_tmp < tp2 and df.loc[row[0], '<TP_SL>'] == 1:  # TP2
-                    df.loc[row[0], '<TP_SL>'] = 2
-                elif not up and low_tmp < tp3 and df.loc[row[0], '<TP_SL>'] == 2:  # TP3
-                    df.loc[row[0], '<TP_SL>'] = 3
-                    break
+                df.loc[row[0], '<SEC>'] = int((next_dt - current_dt).total_seconds())  # Запись секунд
 
-            df.to_csv(target_file_range, index=False)  # Запись в файл для одного тикового файла
+
+                df.to_csv(target_file_range, index=False)  # Запись в файл для одного тикового файла
         # print(df)
         # break
 
@@ -106,7 +74,11 @@ def run(files: list[Path], razmer: int, target_dir: Path, tick: int):
 if __name__ == "__main__":
     razmer: int = 250
     ticker: str = 'RTS'
-    year: str = '2021'
+    year: str = '2022'
+
+    # Настройки отображения DF
+    pd.set_option('max_rows', 5)  # Установка 5 строк вывода DF
+    pd.set_option('display.max_columns', None)  # Сброс ограничений на число столбцов
 
     source_dir: Path = Path(f'c:\data_quote\data_prepare_{ticker}_range_mvc_tpsl')  # Путь к ресурсному каталогу
     target_dir: Path = Path(f'c:\data_quote\data_prepare_{ticker}_range_mvc_tpsl_sec')  # Путь к целевому каталогу
@@ -117,4 +89,4 @@ if __name__ == "__main__":
     files: list[Path] = [f for f in source_dir.glob(f'SPFB.RTS_range{razmer}_*_{year}*.txt')]
     print(files)
 
-    # run(files, razmer, target_dir, tick)
+    run(files, razmer, target_dir)

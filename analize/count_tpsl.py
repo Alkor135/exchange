@@ -20,7 +20,7 @@ def run(files_path, razmer, year):
 
         df = pd.read_csv(file, delimiter=',')  # Считываем данные в DF
 
-        df = df.loc[(df['<TIME>'] >= 100000) & (df['<TIME>'] < 110000)]  # Выборка по значениям (по времени)
+        df = df.loc[(df['<TIME>'] >= 90000) & (df['<TIME>'] < 100000)]  # Выборка по значениям (по времени)
 
         rez = df['<TP_SL>'].value_counts()  # DF с количеством по профитности
         print('\n', file.name)
