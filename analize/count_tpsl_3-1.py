@@ -1,18 +1,27 @@
 """
 Скрипт собирает статистику по файлам ТПСЛ
 """
+from typing import Any
 import re
 from pathlib import *
 
 import pandas as pd
 
 
+def replace_cell(cell: Any):
+    if cell == 0 or cell == 1 or cell == 2:
+        return -1
+    else:
+        return cell
+
+
 def run(files_path, razmer, year):
 
-    df_total: pd = pd.DataFrame()
+    result: pd = pd.DataFrame()
+    tiker: str = ''
     raznica = 0
-
     for ind_file, file in enumerate(files_path, start=1):  # Итерация по тиковым файлам
+        # print('\rCompleted files: {:.2f}%'.format(ind_file * 100 / len(files_path)), end='')  # Прогресс
 
         # Парсинг имени файла
         list_split = re.split('_', file.name, maxsplit=0)  # Разделение имени файла по '_'
@@ -22,18 +31,26 @@ def run(files_path, razmer, year):
 
         df = df.loc[(df['<TIME>'] >= 100000) & (df['<TIME>'] < 110000)]  # Выборка по значениям (по времени)
 
+        df['<TP_SL>'] = df.apply(lambda x: replace_cell(x['<TP_SL>']), axis=1)
+
         rez = df['<TP_SL>'].value_counts()  # DF с количеством по профитности
-        print('\n', file.name)
+        print(file.name)
         # print(df['<TP_SL>'].value_counts())
         print(df['<TP_SL>'].value_counts(normalize=True))
 
-        df_total = df_total.append(df)
+        if 3 in rez.index and -1 in rez.index:
+            print(f'-1: {rez[-1]},  +3: {rez[3]}   Разница: {rez[3]*3-rez[-1]}')
+        elif 3 not in rez.index and -1 in rez.index:
+            print(f'-1: {rez[-1]}')
+
+        print()
 
         # break
 
-    print('\nИтого')
-    print(df_total['<TP_SL>'].value_counts())
-    print(df_total['<TP_SL>'].value_counts(normalize=True))
+    print(raznica)
+    # target_name: str = f'{tiker}_00_range{razmer}_splice_{year}.txt'  # Создание имени новому файлу
+    # target_file: Path = Path(target_dir / target_name)  # Составление пути к новому файлу
+    # result.to_csv(target_file, index=False)  # Запись в файл
 
 
 if __name__ == "__main__":

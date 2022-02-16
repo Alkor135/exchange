@@ -18,10 +18,8 @@ def zero_hour(cell):
 
 
 def plot_candlestick(df, ax):
-    # fplt.candlestick_ochl(df[['<OPEN>', '<CLOSE>', '<HIGH>', '<LOW>']], ax=ax)  # рисуем свечной график в основном окне
-    df[['<OPEN>', '<CLOSE>', '<HIGH>', '<LOW>']].plot(ax=ax, kind='candle')
-    # fplt.plot(df['<MAX_VOLUME_PRICE>'], kind='scatter', style='o', color='#00f', ax=ax)  # Отметки на графике макс объемов в кластере
-    df['<MAX_VOLUME_PRICE>'].plot(kind='scatter', style='o', color='#00f', ax=ax)
+    df[['<OPEN>', '<CLOSE>', '<HIGH>', '<LOW>']].plot(ax=ax, kind='candle')  # рисуем свечной график в основном окне
+    df['<MAX_VOLUME_PRICE>'].plot(kind='scatter', style='o', color='#00f', ax=ax)  # Отметки на графике макс объемов в кластере
 
 
 def plot_tpsl(df, ax):
@@ -40,7 +38,8 @@ if __name__ == "__main__":
     """
     # Загружаем файл в DF
     df = pd.read_csv(
-        Path('c:\data_quote\data_prepare_RTS_range_mvc_tpsl\SPFB.RTS_range250_mvc_tpsl_20220119.txt'),
+        # Path('c:\data_quote\data_prepare_RTS_range_mvc_tpsl\SPFB.RTS_range250_mvc_tpsl_20220119.txt'),
+        Path('c:\data_quote\data_prepare_RTS_range_mvc_tpsl\SPFB.RTS_00_range250_splice_2021.txt'),
         delimiter=','
     )
     # Настройки отображения DF
