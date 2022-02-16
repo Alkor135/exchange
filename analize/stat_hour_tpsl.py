@@ -33,31 +33,51 @@ def dataframe_datetime_prepare(df: pd) -> pd:
 
 
 def run(files_path, razmer, year):
-    # result: pd = pd.DataFrame()
+    result_total: pd = pd.DataFrame()
     for ind_file, file in enumerate(files_path, start=1):  # Итерация по файлам
-        result: pd = pd.DataFrame()
+        result3: pd = pd.DataFrame()
         df = pd.read_csv(file, delimiter=',')  # Считываем данные в DF
         df = dataframe_datetime_prepare(df)
 
         for row in df.itertuples():  # Итерация по рандже барам
-            if row[0].hour not in result.columns:  # Если столбец с таким часом не существует
-                result[row[0].hour] = [0, 0]  # Создаем столбец, заполняем нулями
+            if row[0].hour not in result3.columns:  # Если столбец с таким часом не существует
+                result3[row[0].hour] = [0, 0, 0]  # Создаем столбец, заполняем нулями
 
+            # Подсчет для ТП3
             if row[7] == 3:
-                result.loc[0, row[0].hour] += 3  #
-            elif row[7] == -1:
-                result.loc[0, row[0].hour] -= 1
-        print(file.name)
-        print(result)
-        print()
+                result3.loc[0, row[0].hour] += 3  #
+            elif row[7] == -1 or row[7] == 1 or row[7] == 2:
+                result3.loc[0, row[0].hour] -= 1
 
-    # print(result)
+            # Подсчет для ТП2
+            if row[7] == 2 or row[7] == 3:
+                result3.loc[1, row[0].hour] += 2  #
+            elif row[7] == -1 or row[7] == 1:
+                result3.loc[1, row[0].hour] -= 1
+
+            # Подсчет для ТП1
+            if row[7] == 2 or row[7] == 3 or row[7] == 1:
+                result3.loc[2, row[0].hour] += 1  #
+            elif row[7] == -1:
+                result3.loc[2, row[0].hour] -= 1
+
+        if len(result_total) == 0:
+            result_total = result3
+        else:
+            # Сложение DF
+            result_total = result_total.add(result3).combine_first(result_total).combine_first(result3)
+
+        print(file.name)
+        print(result3)
+        print()
+    print(f'Совокупный результат')
+    print(result_total)
 
 
 if __name__ == "__main__":
     razmer: int = 250
     ticker: str = 'RTS'
-    year: str = '2022'
+    year: str = '2021'
 
     source_dir: Path = Path(f'c:\data_quote\data_prepare_{ticker}_range_mvc_tpsl')  # Путь к ресурсному каталогу
 
