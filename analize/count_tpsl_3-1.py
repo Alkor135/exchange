@@ -31,7 +31,7 @@ def run(files_path, razmer, year):
 
         df = df.loc[(df['<TIME>'] >= 100000) & (df['<TIME>'] < 110000)]  # Выборка по значениям (по времени)
 
-        df['<TP_SL>'] = df.apply(lambda x: replace_cell(x['<TP_SL>']), axis=1)
+        df['<TP_SL>'] = df.apply(lambda x: replace_cell(x['<TP_SL>']), axis=1)  # Замена значений ТП под 3
 
         rez = df['<TP_SL>'].value_counts()  # DF с количеством по профитности
         print(file.name)
