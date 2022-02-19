@@ -65,8 +65,7 @@ def run(files: list[Path], razmer: int, target_dir: Path):
 
                 df.loc[row[0], '<SEC>'] = int((next_dt - current_dt).total_seconds())  # Запись секунд
 
-
-                df.to_csv(target_file_range, index=False)  # Запись в файл для одного тикового файла
+        df.to_csv(target_file_range, index=False)  # Запись в файл для одного файла
         # print(df)
         # break
 
