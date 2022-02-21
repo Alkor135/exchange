@@ -16,8 +16,8 @@ symbol = 'RTS'
 
 """
 # df = pd.read_csv(Path('c:\data_quote\data_prepare_RTS_delta\SPFB.RTS_delta_20220119.csv'), delimiter=',')
-# df = pd.read_csv(Path('c:\data_quote\data_prepare_RTS_range_max_vol\SPFB.RTS_range250_max_vol_20220119.txt'), delimiter=',')
-df = pd.read_csv(Path('c:\data_quote\data_prepare_RTS_delta\SPFB.RTS_delta_20220125.csv'), delimiter=',')
+# df = pd.read_csv(Path('c:\data_quote\data_prepare_RTS_delta\SPFB.RTS_delta_20220125.csv'), delimiter=',')
+df = pd.read_csv(Path('c:\data_quote\data_prepare_RTS_delta\SPFB.RTS_00_delta500_splice_2022.txt'), delimiter=',')
 
 pd.set_option('max_rows', 5)  # Установка 5 строк вывода DF
 pd.set_option('display.max_columns', None)  # Сброс ограничений на число столбцов
@@ -31,7 +31,13 @@ def zero_hour(cell):
 
 
 def plot_ema(df, ax):
+    """Отрисовка индикатора ЕМА"""
     df['<CLOSE>'].ewm(span=18).mean().plot(ax=ax, legend='EMA')
+
+
+def plot_delta(df, ax):
+    """Отрисовка индикатора дельты"""
+    df['<DELTA>'].plot(ax=ax, kind='bar', legend='DELTA')  #
 
 
 # Преобразуем столбец <TIME>, где нужно добавив 0 перед часом
@@ -50,12 +56,16 @@ df.drop(labels=['<DATE_TIME>', '<DATE>', '<TIME>', '<VOL>'], axis=1, inplace=Tru
 print(df)
 
 # создаем окна
-ax = fplt.create_plot(symbol, rows=1)
+ax, ax1 = fplt.create_plot(symbol, rows=2)
 
 # рисуем свечной график в основном окне
 candles = df[['<OPEN>', '<CLOSE>', '<HIGH>', '<LOW>']]
 fplt.candlestick_ochl(candles, ax=ax)
+
 plot_ema(df, ax)
+plot_delta(df, ax1)
+
+ax1.setXLink(ax)  # Для синхронизации осей Х
 
 # Проба дополнить график точками (нужно в будущем для отметки на графике макс объемов в кластере)
 # df.plot('<MAX_VOLUME_PRICE>', kind='scatter', style='o', color='#00f')

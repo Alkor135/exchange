@@ -24,7 +24,7 @@ def plot_candlestick(df, ax):
 
 def plot_tpsl(df, ax):
     # ax.setXLink(True)
-    df['<TP_SL>'].plot(ax=ax, kind='bar')  # Не синхронный масштаб. отображение отличное  , kind='bar'
+    df['<TP_SL>'].plot(ax=ax, kind='bar')  #
 
 
 if __name__ == "__main__":

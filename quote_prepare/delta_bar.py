@@ -22,7 +22,7 @@ def run(tick_files: list, delta_max_val: int, target_dir: Path):
         list_split = re.split('_', tick_file.name, maxsplit=0)  # Разделение имени файла по '_'
         tiker = list_split[0]  # Получение тикера из имени файла
         date_quote_file = re.findall(r'\d+', str(tick_file))  # Получение цифр из пути к файлу
-        target_name = f'{tiker}_delta_{date_quote_file[0]}.csv'  # Создание имени новому файлу
+        target_name = f'{tiker}_delta{delta_max_val}_{date_quote_file[0]}.csv'  # Создание имени новому файлу
         target_file_delta: Path = Path(target_dir / target_name)  # Составление пути к файлу
 
         if Path.is_file(target_file_delta):  # Если файл существует
@@ -37,6 +37,7 @@ def run(tick_files: list, delta_max_val: int, target_dir: Path):
             df: pd = pd.DataFrame(columns='<DATE> <TIME> <OPEN> <HIGH> <LOW> <CLOSE> <VOL> <DELTA>'.split(' '))
 
             for tick in df_ticks_file.itertuples():  # Итерация по строкам тикового DF
+                # Индикация прогресса
                 print('\rCompleted file: {:.2f}%. Completed files: {:.2f}%'.format(
                     tick[0] * 100 / len(df_ticks_file.index),
                     ind_file * 100 / len(tick_files)
@@ -96,9 +97,9 @@ def run(tick_files: list, delta_max_val: int, target_dir: Path):
 
 if __name__ == "__main__":
     ticker: str = 'RTS'
-    year_tick: str = '2022'
+    year_tick: str = '2021'
     delta_max_val: int = 500
-    source_dir_tick: Path = Path(f'c:/data_quote/data_finam_{ticker}_tick')  # Путь к ресурсному каталогу
+    source_dir_tick: Path = Path(f'c:/data_quote/data_finam_{ticker}_tick')  # Путь к ресурсному каталогу с тиками
     target_dir: Path = Path(f'c:/data_quote/data_prepare_{ticker}_delta')  # Путь к целевому каталогу
 
     # Создание списка путей к файлам с тиками

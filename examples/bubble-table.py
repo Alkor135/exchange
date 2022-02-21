@@ -47,22 +47,22 @@ def resample(prices, quotes):
     p = p.iloc[downsample-1::downsample]
     p.index = q.index
 
-    return p,q
+    return p, q
 
 
 def plot_bubble_pass(price, price_col, size_col, min_val, max_val, scale, color, ax):
     price = price.copy()
-    price.loc[(price[size_col]<min_val)|(price[size_col]>max_val), price_col] = np.nan
+    price.loc[(price[size_col] < min_val) | (price[size_col] > max_val), price_col] = np.nan
     fplt.plot(price[price_col], style='o', width=scale, color=color, ax=ax)
 
 
 def plot_quote_bubbles(quotes, ax):
-    quotes['bidSize2'] = np.sqrt(quotes.bidSize) # linearize by circle area
+    quotes['bidSize2'] = np.sqrt(quotes.bidSize)  # linearize by circle area
     quotes['askSize2'] = np.sqrt(quotes.askSize)
     size2 = quotes.bidSize2.append(quotes.askSize2)
     rng = np.linspace(size2.min(), size2.max(), 5)
     rng = list(zip(rng[:-1], rng[1:]))
-    for a,b in reversed(rng):
+    for a, b in reversed(rng):
         scale = (a+b) / rng[-1][1] + 0.2
         plot_bubble_pass(quotes, 'bidPrice', 'bidSize2', a, b, scale=scale, color='#0f0', ax=ax)
         plot_bubble_pass(quotes, 'askPrice', 'askSize2', a, b, scale=scale, color='#f00', ax=ax)
@@ -81,7 +81,7 @@ def plot_quote_table(quotes, ax):
     quotes[0] = +quotes['bidSize'] * 0.5 / quotes['bidSize'].max() + 0.5
 
     ts = [int(t.timestamp()) for t in quotes.index]
-    colmap = fplt.ColorMap([0.0, 0.5, 1.0], [[200, 80, 60], [200, 190, 100], [40, 170, 30]]) # traffic light colors
+    colmap = fplt.ColorMap([0.0, 0.5, 1.0], [[200, 80, 60], [200, 190, 100], [40, 170, 30]])  # traffic light colors
     fplt.heatmap(quotes[[1, 0]], colmap=colmap, colcurve=lambda x: x, ax=ax) # linear color mapping
     fplt.labels(ts, [1.5]*count, ['%.1f'%(v/1e6) for v in quotes['askSize']], ax=ax2, anchor=(0.5, 0.5))
     fplt.labels(ts, [0.5]*count, ['%.1f'%(v/1e6) for v in quotes['bidSize']], ax=ax2, anchor=(0.5, 0.5))
@@ -91,7 +91,7 @@ prices, quotes = download_resample()
 
 fplt.max_zoom_points = 5
 fplt.right_margin_candles = 0
-ax,ax2 = fplt.create_plot(f'BitMEX {downsample}m quote bubble plot + quote table', rows=2, maximize=False)
+ax, ax2 = fplt.create_plot(f'BitMEX {downsample}m quote bubble plot + quote table', rows=2, maximize=False)
 fplt.windows[0].ci.layout.setRowStretchFactor(0, 10) # make primary plot large, and implicitly table small
 candles = fplt.candlestick_ochl(prices[['Open','Close','High','Low']], ax=ax)
 candles.colors.update(dict(bear_body='#fa8')) # bright red, to make bubbles visible
