@@ -23,8 +23,13 @@ def plot_candlestick(df, ax):
 
 
 def plot_tpsl(df, ax):
-    # ax.setXLink(True)
-    df['<TP_SL>'].plot(ax=ax, kind='bar')  #
+    """ Отрисовка ТП/СЛ """
+    df['<TP_SL>'].plot(ax=ax, kind='bar', legend='TP_SL')  #
+
+
+def plot_ema(df, ax):
+    """Отрисовка индикатора ЕМА"""
+    df['<CLOSE>'].ewm(span=18).mean().plot(ax=ax, legend='EMA')
 
 
 if __name__ == "__main__":
@@ -57,6 +62,7 @@ if __name__ == "__main__":
     ax1, ax2 = fplt.create_plot(symbol, rows=2)  # Cоздаем окна
     plot_tpsl(df, ax2)  #
     plot_candlestick(df, ax1)  # рисуем свечной график в основном окне
+    plot_ema(df, ax1)
 
     ax2.setXLink(ax1)  # Для синхронизации осей Х
 

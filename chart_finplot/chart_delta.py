@@ -17,7 +17,7 @@ symbol = 'RTS'
 """
 # df = pd.read_csv(Path('c:\data_quote\data_prepare_RTS_delta\SPFB.RTS_delta_20220119.csv'), delimiter=',')
 # df = pd.read_csv(Path('c:\data_quote\data_prepare_RTS_delta\SPFB.RTS_delta_20220125.csv'), delimiter=',')
-df = pd.read_csv(Path('c:\data_quote\data_prepare_RTS_delta\SPFB.RTS_00_delta500_splice_2022.txt'), delimiter=',')
+df = pd.read_csv(Path('c:\data_quote\data_prepare_RTS_delta\SPFB.RTS_00_delta500_splice_2021.txt'), delimiter=',')
 
 pd.set_option('max_rows', 5)  # Установка 5 строк вывода DF
 pd.set_option('display.max_columns', None)  # Сброс ограничений на число столбцов

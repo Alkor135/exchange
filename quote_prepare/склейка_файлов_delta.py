@@ -29,7 +29,7 @@ def run(files: list[Path], razmer: int, year: str, target_dir: Path) -> None:
 if __name__ == "__main__":
     razmer: int = 500
     ticker: str = 'RTS'
-    year: str = '2022'
+    year: str = '2021'
 
     source_dir_tick: Path = Path(f'c:\data_quote\data_prepare_{ticker}_delta')  # Путь к ресурсному каталогу
     target_dir: Path = Path(f'c:\data_quote\data_prepare_{ticker}_delta')  # Путь к целевому каталогу
