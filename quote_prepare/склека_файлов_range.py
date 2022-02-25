@@ -29,10 +29,12 @@ def run(files: list[Path], razmer: int, year: str, target_dir: Path) -> None:
 if __name__ == "__main__":
     razmer: int = 250
     ticker: str = 'RTS'
-    year: str = '2022'
+    year: str = '2021'
 
-    source_dir_tick: Path = Path(f'c:\data_quote\data_prepare_{ticker}_range_mvc_tpsl_sec')  # Путь к ресурсному каталогу
-    target_dir: Path = Path(f'c:\data_quote\data_prepare_{ticker}_range_mvc_tpsl_sec')  # Путь к целевому каталогу
+    # source_dir_tick: Path = Path(f'c:\data_quote\data_prepare_{ticker}_range_mvc_tpsl_sec')  # Путь к ресурсному каталогу
+    # target_dir: Path = Path(f'c:\data_quote\data_prepare_{ticker}_range_mvc_tpsl_sec')  # Путь к целевому каталогу
+    source_dir_tick: Path = Path(f'c:\data_quote\data_prepare_{ticker}_range')  # Путь к ресурсному каталогу
+    target_dir: Path = Path(f'c:\data_quote\data_prepare_{ticker}_range')  # Путь к целевому каталогу
 
     # Создание списка путей к файлам
     files_path: list[Path] = list(source_dir_tick.glob(f'*{razmer}*{year}*.txt'))
