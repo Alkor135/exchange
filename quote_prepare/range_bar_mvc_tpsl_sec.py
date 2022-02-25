@@ -79,8 +79,8 @@ if __name__ == "__main__":
     pd.set_option('max_rows', 5)  # Установка 5 строк вывода DF
     pd.set_option('display.max_columns', None)  # Сброс ограничений на число столбцов
 
-    source_dir: Path = Path(f'c:\data_quote\data_prepare_{ticker}_range_mvc_tpsl')  # Путь к ресурсному каталогу
-    target_dir: Path = Path(f'c:\data_quote\data_prepare_{ticker}_range_mvc_tpsl_sec')  # Путь к целевому каталогу
+    source_dir: Path = Path(fr'c:\Users\Alkor\gd\data_quote\data_prepare_{ticker}_range_mvc_tpsl')  # Путь к ресурсному каталогу
+    target_dir: Path = Path(fr'c:\Users\Alkor\gd\data_quote\data_prepare_{ticker}_range_mvc_tpsl_sec')  # Путь к целевому каталогу
 
     if not target_dir.is_dir(): target_dir.mkdir()  # Создание каталога
 

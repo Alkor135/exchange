@@ -41,7 +41,7 @@ if __name__ == "__main__":
     ticker: str = 'RTS'
     year: str = '2022'
 
-    source_dir: Path = Path(f'c:\data_quote\data_prepare_{ticker}_range_mvc_tpsl')  # Путь к ресурсному каталогу
+    source_dir: Path = Path(fr'c:\Users\Alkor\gd\data_quote\data_prepare_{ticker}_range_mvc_tpsl')  # Путь к ресурсному каталогу
 
     # Создание списка путей к файлам
     files_path: list[Path] = list(source_dir.glob(f'*{razmer}*{year}*.txt'))
