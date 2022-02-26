@@ -20,7 +20,7 @@ def run(files_path, razmer, year):
     result: pd = pd.DataFrame()
     tiker: str = ''
     raznica = 0
-    for ind_file, file in enumerate(files_path, start=1):  # Итерация по тиковым файлам
+    for ind_file, file in enumerate(files_path, start=1):  # Итерация по файлам
         # print('\rCompleted files: {:.2f}%'.format(ind_file * 100 / len(files_path)), end='')  # Прогресс
 
         # Парсинг имени файла
