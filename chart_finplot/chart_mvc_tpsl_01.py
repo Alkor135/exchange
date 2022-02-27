@@ -32,9 +32,33 @@ def plot_ema(df, ax):
     df['<CLOSE>'].ewm(span=18).mean().plot(ax=ax, legend='EMA')
 
 
+def edge_prepare(df, edge_only):
+    col_df = list(df.columns.values)  # Названия колонок в список
+    high_idx = col_df.index('<HIGH>') + 1  # Получение индекса колонки
+    low_idx = col_df.index('<LOW>') + 1  # Получение индекса колонки
+    mvc_idx = col_df.index('<MAX_VOLUME_PRICE>') + 1  # Получение индекса колонки
+    close_idx = col_df.index('<CLOSE>') + 1  # Получение индекса колонки
+
+    df_tpsl = pd.DataFrame()
+
+    for row in df.itertuples():  # Итерация по рандже барам
+        if row[low_idx] <= row[mvc_idx] <= row[high_idx]:  # Если макс объем в баре (защита от ошибочных баров)
+            df_tmp = pd.DataFrame({'field': [row[low_idx], row[high_idx]]})
+            if row[close_idx] == row[high_idx]:  # Если бар на повышение
+                val = df_tmp['field'].quantile(edge_only)
+                if row[mvc_idx] <= val:
+                    continue
+            elif row[close_idx] == row[low_idx]:  # Если бар на понижение
+                val = df_tmp['field'].quantile(1 - edge_only)
+                if row[mvc_idx] >= val:
+                    continue
+        df_tpsl[row.index, '<TP_SL>'] = 0
+    return df_tpsl
+
+
 if __name__ == "__main__":
     symbol = 'RTS'
-    edge_only = True
+    edge_only = 0.0  # Значение установить в 0 если не нужны перцентили ТП/СЛ
     # Формат файла
     """
     <DATE>,<TIME>,<OPEN>,<HIGH>,<LOW>,<CLOSE>,<VOL>,<MAX_VOLUME_PRICE>,<MAX_VOLUME_CLUSTER>,<TP_SL>
@@ -49,7 +73,7 @@ if __name__ == "__main__":
         delimiter=','
     )
     # Настройки отображения DF
-    pd.set_option('max_rows', 5)  # Установка 5 строк вывода DF
+    pd.set_option('max_rows', 15)  # Установка 5 строк вывода DF
     pd.set_option('display.max_columns', None)  # Сброс ограничений на число столбцов
 
     # Обработка DF
@@ -58,7 +82,9 @@ if __name__ == "__main__":
     df = df.set_index(pd.DatetimeIndex(df['<DATE_TIME>']))  # Меняем индекс и делаем его типом datetime
     df.drop(labels=['<DATE_TIME>', '<DATE>', '<TIME>', '<VOL>'], axis=1, inplace=True)  # Удаляем ненужные колонки. axis=1 означает, что отбрасываем колонку а не индекс
 
-    if edge_only:
+    if edge_only != 0:
+        df_tpsl = edge_prepare(df, edge_only)
+
 
     print(df)
 
