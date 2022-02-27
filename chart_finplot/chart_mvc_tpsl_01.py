@@ -34,6 +34,7 @@ def plot_ema(df, ax):
 
 if __name__ == "__main__":
     symbol = 'RTS'
+    edge_only = True
     # Формат файла
     """
     <DATE>,<TIME>,<OPEN>,<HIGH>,<LOW>,<CLOSE>,<VOL>,<MAX_VOLUME_PRICE>,<MAX_VOLUME_CLUSTER>,<TP_SL>
@@ -43,8 +44,8 @@ if __name__ == "__main__":
     """
     # Загружаем файл в DF
     df = pd.read_csv(
-        # Path('c:\data_quote\data_prepare_RTS_range_mvc_tpsl\SPFB.RTS_range250_mvc_tpsl_20220119.txt'),
-        Path('c:\data_quote\data_prepare_RTS_range_mvc_tpsl\SPFB.RTS_00_range250_splice_2021.txt'),
+        # Path('fr'c:\Users\Alkor\gd\data_quote\data_prepare_RTS_range_mvc_tpsl\SPFB.RTS_range250_mvc_tpsl_20220119.txt'),
+        Path(fr'c:\Users\Alkor\gd\data_quote\data_prepare_RTS_range_mvc_tpsl\SPFB.RTS_00_range250_splice_2021.txt'),
         delimiter=','
     )
     # Настройки отображения DF
@@ -56,6 +57,9 @@ if __name__ == "__main__":
     df['<DATE_TIME>'] = df['<DATE>'].astype(str) + ' ' + df['<TIME>'].astype(str)  # Создаем новый столбец <DATE_TIME> слиянием столбцов <DATE> и <TIME>
     df = df.set_index(pd.DatetimeIndex(df['<DATE_TIME>']))  # Меняем индекс и делаем его типом datetime
     df.drop(labels=['<DATE_TIME>', '<DATE>', '<TIME>', '<VOL>'], axis=1, inplace=True)  # Удаляем ненужные колонки. axis=1 означает, что отбрасываем колонку а не индекс
+
+    if edge_only:
+
     print(df)
 
     # Построение графика
