@@ -64,7 +64,7 @@ def edge_prepare(df: pd, edge_only: Any):
 
 if __name__ == "__main__":
     symbol = 'RTS'
-    edge_only = 0.25  # Значение установить в 0 если не нужны перцентили ТП/СЛ
+    edge_only = 0.0  # Значение установить в 0 если не нужны перцентили ТП/СЛ
     ema_period = 18
     # Формат файла
     """
