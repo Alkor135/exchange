@@ -78,7 +78,9 @@ def run(source_file):
             result_count.loc[3, row[0].hour] += 1
 
     print('\n', source_file.name)
+    print('Результирующая статистика по часам')
     print(result3)
+    print('Количественная статистика по часам')
     print(result_count)
 
     # print('\n', source_file.name)
